@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { BookService } from './book.service';
+import { BookService } from './index';
 
 @Controller('book')
 export class BookController {

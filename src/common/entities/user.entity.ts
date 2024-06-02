@@ -13,5 +13,5 @@ export class UserEntity extends BaseEntity {
   password: string;
 
   // @BeforeInsert()
-  // async
+  // if (username in us)
 }
