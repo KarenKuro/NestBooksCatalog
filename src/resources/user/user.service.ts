@@ -6,7 +6,7 @@ import { ICreateUser } from '@app/common/models';
 import { scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { sign } from 'jsonwebtoken';
-import { JWT_SECRET } from 'config';
+import { JWT_SECRET, SALT } from 'config';
 import { UserResponseDTO } from './dto/user-response.dto';
 
 const scrypt = promisify(_scrypt);
@@ -21,21 +21,21 @@ export class UserService {
   async create(body: ICreateUser): Promise<UserEntity> {
     //Спросить у Матоса почему так???
     const password = body.password;
-    const hashedPassword = (await scrypt(password, 'MySalt', 32)) as Buffer;
+    const hashedPassword = (await scrypt(password, SALT, 32)) as Buffer;
     body.password = hashedPassword.toString('hex');
 
     const user = this.userReposirory.create(body);
     return await this.userReposirory.save(user);
   }
 
-  async signin(email: string, password: string): Promise<UserEntity> {
-    const [user] = await this.findByEmail(email);
+  async signin(user: UserEntity, password: string): Promise<UserEntity> {
     const storedHash = user.password;
-    const hash = (await scrypt(password, 'MySalt', 32)) as Buffer;
+    const hash = (await scrypt(password, SALT, 32)) as Buffer;
 
     if (storedHash !== hash.toString('hex')) {
       throw new HttpException('bad password', HttpStatus.BAD_REQUEST);
     }
+
     return user;
   }
 
@@ -72,10 +72,13 @@ export class UserService {
     return sign(
       {
         id: user.id,
-        username: user.username,
-        email: user.email,
+        // username: user.username,
+        // email: user.email,
       },
       JWT_SECRET,
+      {
+        expiresIn: '30 days',
+      },
     );
   }
 
