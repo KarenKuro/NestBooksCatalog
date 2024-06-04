@@ -1,11 +1,12 @@
+import { DBPASSWORD, DBPORT, DBUSERNAME } from 'config';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 const config: PostgresConnectionOptions = {
   type: 'postgres',
   host: 'localhost',
-  port: 5432,
-  username: 'books_catalog',
-  password: '11031990',
+  port: DBPORT,
+  username: DBUSERNAME,
+  password: DBPASSWORD,
   database: 'books_catalog',
   entities: [__dirname + '**/**/*.entity{.ts,.js}'],
   synchronize: true,

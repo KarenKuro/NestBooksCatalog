@@ -1,5 +1,5 @@
-import { AuthorEntity } from './';
 import { Column, Entity, ManyToOne } from 'typeorm';
+import { AuthorEntity } from './';
 import { BaseEntity } from './base';
 
 @Entity({ name: 'books' })

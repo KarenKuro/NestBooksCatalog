@@ -13,7 +13,4 @@ export class UserEntity extends BaseEntity {
   @Column()
   @Exclude()
   password: string;
-
-  // @BeforeInsert()
-  // if (username in us)
 }

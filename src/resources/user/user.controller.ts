@@ -1,6 +1,5 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -9,27 +8,30 @@ import {
   Param,
   Patch,
   Post,
-  UseInterceptors,
 } from '@nestjs/common';
-import { UserService } from './index';
-import { CreateUserDTO, UpdateUserDTO, FindIDDTO } from './dto/index';
+import {
+  CreateUserDTO,
+  UpdateUserDTO,
+  FindIDDTO,
+  UserResponseDTO,
+} from './dto/index';
+import { UserService } from './user.service';
 import { UserEntity } from '../../common/entities/user.entity';
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('signup')
-  async create(@Body() createUserDto: CreateUserDTO): Promise<UserEntity> {
-    if ((await this.userService.findByEmail(createUserDto.email)).length > 0) {
+  async create(@Body() createUserDto: CreateUserDTO): Promise<UserResponseDTO> {
+    if ((await this.userService.findByEmail(createUserDto.email)).length) {
       throw new HttpException(
         'a user with this email exists',
         HttpStatus.BAD_REQUEST,
       );
     }
     if (
-      (await this.userService.findByUsername(createUserDto.username)).length > 0
+      (await this.userService.findByUsername(createUserDto.username)).length
     ) {
       throw new HttpException(
         'a user with this username exists',
@@ -38,7 +40,17 @@ export class UserController {
     }
 
     const user = await this.userService.create(createUserDto);
-    return user;
+    return this.userService.buildUserResponse(user);
+  }
+
+  @Post('signin')
+  async signin(@Body() body: CreateUserDTO): Promise<UserEntity> {
+    const [user] = await this.userService.findByEmail(body.email);
+    if (!user) {
+      throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+    }
+
+    return this.userService.signin(body.email, body.password);
   }
 
   @Get('/:id')
