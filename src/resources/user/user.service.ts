@@ -1,13 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '@common/entities';
-import { ICreateUser } from '@app/common/models';
+import { ICreateUser, IUserResponse } from '@app/common/models';
 import { scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { sign } from 'jsonwebtoken';
 import { JWT_SECRET, SALT } from 'config';
-import { UserResponseDTO } from './dto/user-response.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -19,7 +18,6 @@ export class UserService {
   ) {}
 
   async create(body: ICreateUser): Promise<UserEntity> {
-    //Спросить у Матоса почему так???
     const password = body.password;
     const hashedPassword = (await scrypt(password, SALT, 32)) as Buffer;
     body.password = hashedPassword.toString('hex');
@@ -28,14 +26,13 @@ export class UserService {
     return await this.userReposirory.save(user);
   }
 
-  async signin(user: UserEntity, password: string): Promise<UserEntity> {
+  async signin(user: UserEntity, password: string): Promise<UserEntity> | null {
     const storedHash = user.password;
     const hash = (await scrypt(password, SALT, 32)) as Buffer;
 
     if (storedHash !== hash.toString('hex')) {
-      throw new HttpException('bad password', HttpStatus.BAD_REQUEST);
+      return null;
     }
-
     return user;
   }
 
@@ -60,10 +57,10 @@ export class UserService {
   ): Promise<UserEntity> {
     const updatedUser = Object.assign(user, attrs);
 
-    return this.userReposirory.save(updatedUser);
+    return await this.userReposirory.save(updatedUser);
   }
 
-  async remove(user: UserEntity) {
+  async remove(user: UserEntity): Promise<UserEntity> {
     const removedUser = await this.userReposirory.remove(user);
     return removedUser;
   }
@@ -82,7 +79,7 @@ export class UserService {
     );
   }
 
-  buildUserResponse(user: UserEntity): UserResponseDTO {
+  buildUserResponse(user: UserEntity): IUserResponse {
     const userResponse = {
       token: this.generateJwt(user),
     };

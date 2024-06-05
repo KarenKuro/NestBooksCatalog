@@ -13,7 +13,7 @@ import {
 import {
   CreateUserDTO,
   UpdateUserDTO,
-  FindIDDTO,
+  FindIdDTO,
   UserResponseDTO,
   LoginUserDTO,
 } from './dto/index';
@@ -55,18 +55,25 @@ export class UserController {
     }
     const authUser = await this.userService.signin(user, body.password);
 
+    if (authUser === null) {
+      throw new HttpException('bad password', HttpStatus.BAD_REQUEST);
+    }
+
     return this.userService.buildUserResponse(authUser);
   }
 
   @Get('user')
   @UseGuards(AuthGuard)
-  async currentUser(@User() user: UserEntity): Promise<UserResponseDTO> {
-    return this.userService.buildUserResponse(user);
+  async currentUser(@User() user: UserEntity): Promise<UserEntity> {
+    //Promise<UserResponseDTO> {
+    // return this.userService.buildUserResponse(user);
+    return this.userService.findOne(user.id);
   }
 
   @Get('/:id')
+  @UseGuards(AuthGuard)
   async findById(
-    @Param() params: FindIDDTO,
+    @Param() params: FindIdDTO,
     @User('id') currentUserId: number,
   ): Promise<UserEntity> {
     const user = await this.userService.findOne(+params.id);
@@ -80,8 +87,9 @@ export class UserController {
   }
 
   @Patch('/:id')
+  @UseGuards(AuthGuard)
   async update(
-    @Param() params: FindIDDTO,
+    @Param() params: FindIdDTO,
     @Body() updateUserDto: UpdateUserDTO,
     @User('id') currentUserId: number,
   ): Promise<UserEntity> {
@@ -91,12 +99,13 @@ export class UserController {
   }
 
   @Delete('/:id')
+  @UseGuards(AuthGuard)
   async remove(
-    @Param() params: FindIDDTO,
+    @Param() params: FindIdDTO,
     @User('id') currentUserId: number,
   ): Promise<UserEntity> {
     const user = await this.findById(params, currentUserId);
-    const removedUser = await this.userService.remove(user);
+    const removedUser = this.userService.remove(user);
     return removedUser;
   }
 }

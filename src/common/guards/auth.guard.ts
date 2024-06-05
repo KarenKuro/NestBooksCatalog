@@ -7,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { IExpressRequest } from '../models';
 
+// Этот AuthGuard проверяет, аутентифицирован ли пользователь, путем проверки наличия свойства user в объекте запроса
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {

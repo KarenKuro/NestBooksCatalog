@@ -1,10 +1,15 @@
-import { UserService } from '@app/resources';
-import { FindIDDTO } from '@app/resources/user/dto';
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import { verify } from 'jsonwebtoken';
 import { JWT_SECRET } from 'config';
 import { NextFunction, Response } from 'express';
-import { verify } from 'jsonwebtoken';
 import { IExpressRequest } from '../models';
+import { UserService } from '@app/resources';
+import { FindIdDTO } from '@app/resources/user/dto';
+
+/* Эта логика позволяет аутентифицировать пользователя на основе JWT-токена
+ и добавлять информацию о пользователе в объект запроса
+  для последующего использования в контроллерах и других middleware
+*/
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -20,7 +25,7 @@ export class AuthMiddleware implements NestMiddleware {
     const token = req.headers.authorization.split(' ')[1];
 
     try {
-      const decode = verify(token, JWT_SECRET) as FindIDDTO;
+      const decode = verify(token, JWT_SECRET) as FindIdDTO;
       const user = await this.userService.findOne(+decode.id);
       req.user = user;
       next();

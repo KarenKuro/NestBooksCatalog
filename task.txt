@@ -1,21 +1,21 @@
 Task Description:
-    1. Setup and Configuration:
+ +   1. Setup and Configuration:
  +       ◦ Set up a new Nest.js project with Typescript.
- ?       ◦ Configure Nest.js to handle routes and middleware.
+ +       ◦ Configure Nest.js to handle routes and middleware.
  +       ◦ Establish a connection to a MySQL or PostgreSQL database using an ORM (e.g., TypeORM, Sequelize) or a MySQL client (e.g., mysql2).
-    2. Database Design:
+ +   2. Database Design:
  +       ◦ Design a MySQL or PostgreSQL database schema for books and authors.
  +       ◦ Books Table: Should include fields such as ID, Title, ISBN, Published Date, and Author ID.
  +       ◦ Authors Table: Should include fields such as ID, Name, Biography, and Date of Birth.
     3. API Endpoints:
         ◦ Create endpoints for CRUD actions with books (Create, Read, Update, Delete).
-        ◦ Create endpoints for CRUD actions with authors (Create, Read, Update, Delete).
+ +       ◦ Create endpoints for CRUD actions with authors (Create, Read, Update, Delete).
     4. Validation and Error Handling:
         ◦ Implement input validation for each endpoint
         ◦ Ensure proper error handling and return meaningful error messages with appropriate HTTP status codes.
-    5. Authentication and Authorization:
-        ◦ Implement basic authentication (e.g., JWT) for securing the API endpoints.
-        ◦ Ensure only authenticated users can access the API endpoints.
+ +   5. Authentication and Authorization:
+ +      ◦ Implement basic authentication (e.g., JWT) for securing the API endpoints.
+ +       ◦ Ensure only authenticated users can access the API endpoints.
     6. Testing:
         ◦ Write unit tests for each endpoint using a testing framework (e.g., Jest, Mocha).
         ◦ Ensure all tests pass before submitting the task.

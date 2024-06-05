@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumberString } from 'class-validator';
 
-export class FindIDDTO {
+export class FindIdDTO {
   @IsNumberString()
   @IsNotEmpty()
   id: string;

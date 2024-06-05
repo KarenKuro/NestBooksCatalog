@@ -15,6 +15,8 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  // все выходные данные, возвращаемые контроллерами,
+  // автоматически проходили через ClassSerializerInterceptor(декоратор @Exclude())
   await app.listen(3000);
 }
 bootstrap();
