@@ -17,11 +17,11 @@ import { AuthorEntity } from '@app/common/entities';
 import { FindIdDTO } from '../user/dto';
 
 @Controller('author')
+@UseGuards(AuthGuard)
 export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   async create(
     @Body() createAuthorDTO: CreateAuthorDTO,
   ): Promise<AuthorEntity> {
@@ -34,7 +34,6 @@ export class AuthorController {
   }
 
   @Get('/:id')
-  @UseGuards(AuthGuard)
   async findById(@Param() params: FindIdDTO): Promise<AuthorEntity> {
     const author = await this.authorService.findOne(+params.id);
     if (!author) {
@@ -44,7 +43,6 @@ export class AuthorController {
   }
 
   @Put('/:id')
-  @UseGuards(AuthGuard)
   async update(
     @Param() params: FindIdDTO,
     @Body() updateAuthorDTO: CreateAuthorDTO,
@@ -58,7 +56,6 @@ export class AuthorController {
   }
 
   @Delete('/:id')
-  @UseGuards(AuthGuard)
   async remove(@Param() params: FindIdDTO): Promise<AuthorEntity> {
     const author = await this.findById(params);
     const removedAuthor = this.authorService.remove(author);
