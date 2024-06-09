@@ -1,8 +1,8 @@
-import { AuthorEntity } from '@app/common/entities';
+import { IAuthor } from '../author';
 
 export interface ICreateBook {
   title: string;
   isbn: string;
   publishedDate: Date;
-  author?: AuthorEntity;
+  author?: IAuthor;
 }

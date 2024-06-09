@@ -18,9 +18,9 @@ import {
   LoginUserDTO,
 } from './dto/index';
 import { UserService } from './user.service';
-import { UserEntity } from '../../common/entities/user.entity';
 import { User } from '@app/common/decorators/user.decorator';
 import { AuthGuard } from '@app/common/guards';
+import { IUser } from '@app/common/models';
 
 @Controller('users')
 export class UserController {
@@ -64,7 +64,7 @@ export class UserController {
 
   @Get('user')
   @UseGuards(AuthGuard)
-  async currentUser(@User() user: UserEntity): Promise<UserEntity> {
+  async currentUser(@User() user: IUser): Promise<IUser> {
     //Promise<UserResponseDTO> {
     // return this.userService.buildUserResponse(user);
     return this.userService.findOne(user.id);
@@ -75,7 +75,7 @@ export class UserController {
   async findById(
     @Param() params: FindIdDTO,
     @User('id') currentUserId: number,
-  ): Promise<UserEntity> {
+  ): Promise<IUser> {
     const user = await this.userService.findOne(+params.id);
     if (!user) {
       throw new HttpException('user not found', HttpStatus.NOT_FOUND);
@@ -92,7 +92,7 @@ export class UserController {
     @Param() params: FindIdDTO,
     @Body() updateUserDto: UpdateUserDTO,
     @User('id') currentUserId: number,
-  ): Promise<UserEntity> {
+  ): Promise<IUser> {
     const user = await this.findById(params, currentUserId);
     const updatedUser = await this.userService.update(user, updateUserDto);
     return updatedUser;
@@ -103,7 +103,7 @@ export class UserController {
   async remove(
     @Param() params: FindIdDTO,
     @User('id') currentUserId: number,
-  ): Promise<UserEntity> {
+  ): Promise<IUser> {
     const user = await this.findById(params, currentUserId);
     const removedUser = this.userService.remove(user);
     return removedUser;

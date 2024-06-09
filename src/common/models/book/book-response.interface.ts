@@ -1,9 +1,11 @@
-import { AuthorEntity } from '@app/common/entities';
+import { IAuthor } from '../author';
 
-export interface IBookResponce {
+export interface IBook {
   id: number;
   title: string;
   isbn: string;
   publishedDate: Date;
-  author: AuthorEntity;
+  author: IAuthor;
+  createdAt: Date;
+  updatedAt: Date;
 }
