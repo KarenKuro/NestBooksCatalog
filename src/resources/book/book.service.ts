@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { AuthorEntity, BookEntity } from '@app/common/entities';
 import { BooksResponse, IBook, ICreateBook } from '@app/common/models';
+import { QueryDTO } from './dto/index';
 
 @Injectable()
 export class BookService {
@@ -45,31 +46,23 @@ export class BookService {
     return removedBook;
   }
 
-  async findAll(query: any): Promise<BooksResponse> {
+  async findAll(query: QueryDTO, author: AuthorEntity): Promise<BooksResponse> {
     const queryBuilder = this.bookRepository
       .createQueryBuilder('books')
       .leftJoinAndSelect('books.author', 'author');
-
     queryBuilder.orderBy('books.id', 'DESC');
+
+    queryBuilder.andWhere('books.authorId = :id', { id: author.id });
 
     const booksCount = await queryBuilder.getCount();
 
-    if (query.author) {
-      const author = await this.authorRepository.findOneBy({
-        name: query.author,
-      });
-
-      queryBuilder.andWhere('books.authorId = :id', { id: author.id });
-    }
-
     if (query.limit) {
-      queryBuilder.limit(query.limit);
+      queryBuilder.limit(+query.limit);
     }
 
     if (query.offset) {
-      queryBuilder.offset(query.offset);
+      queryBuilder.offset(+query.offset);
     }
-
     const books = await queryBuilder.getMany();
     return { books: books, booksCount };
   }

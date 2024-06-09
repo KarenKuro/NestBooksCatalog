@@ -14,7 +14,7 @@ import {
 import { BookService } from './book.service';
 import { AuthorService } from '../author';
 import { AuthGuard } from '@app/common/guards';
-import { CreateBookDTO } from './dto/create-book.dto';
+import { CreateBookDTO, QueryDTO } from './dto/index';
 // import { IBook } from '@app/common/models';
 import { FindIdDTO } from '../user/dto';
 import { BookEntity } from '@app/common/entities';
@@ -48,10 +48,15 @@ export class BookController {
   }
 
   @Get('books')
-  async findAllByAuthor(@Query() query: any): Promise<BooksResponse> {
-    console.log(query);
+  async findAllByAuthor(@Query() query: QueryDTO): Promise<BooksResponse> {
+    const authors = await this.authorService.findByName(query.author);
 
-    return await this.bookService.findAll(query);
+    if (!authors.length) {
+      throw new HttpException('author not found', HttpStatus.BAD_REQUEST);
+    }
+
+    const author = authors[0];
+    return await this.bookService.findAll(query, author);
   }
 
   @Get('/:id')
