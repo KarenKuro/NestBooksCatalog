@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '@common/entities';
-import { ICreateUser, IUser, IUserResponse } from '@app/common/models';
+import { ICreateUser, ITokenResponse, IUser } from '@app/common/models';
 import { scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { sign } from 'jsonwebtoken';
@@ -66,8 +66,6 @@ export class UserService {
     return sign(
       {
         id: user.id,
-        // username: user.username,
-        // email: user.email,
       },
       JWT_SECRET,
       {
@@ -76,18 +74,10 @@ export class UserService {
     );
   }
 
-  buildUserResponse(user: IUser): IUserResponse {
+  buildUserResponse(user: IUser): ITokenResponse {
     const userResponse = {
       token: this.generateJwt(user),
     };
     return userResponse;
-    // const userResponse = new UserResponseDTO();
-    // Object.assign(userResponse, user);
-    // userResponse.token = this.generateJwt(user);
-
-    // return {
-    //   ...user,
-    //   token: this.generateJwt(user),
-    // };
   }
 }
