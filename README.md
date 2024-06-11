@@ -14,11 +14,11 @@ This is a NestJS project that includes three modules: Users, Authors, and Books.
    ```bash
    git clone <https://github.com/KarenKuro/NestBooksCatalog>
    ```
-   
+
 2. Install dependencies
 
    ```bash
-   npm install
+   $ npm install
    ```
 
 3. Create a `.env` file in the root directory and add the following environment variables:
@@ -38,7 +38,24 @@ This is a NestJS project that includes three modules: Users, Authors, and Books.
 To start the application in development mode, use the following command:
 
 ```bash
-npm run start:dev
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
+```
+
+## Test
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
 ```
 
 GitHub repository: https://github.com/KarenKuro/NestBooksCatalog
