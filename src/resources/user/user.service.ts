@@ -6,7 +6,7 @@ import { ICreateUser, ITokenResponse, IUser } from '@app/common/models';
 import { scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { sign } from 'jsonwebtoken';
-import { JWT_SECRET, SALT } from 'config';
+import { JWT_SECRET, SALT } from '@app/../config';
 
 const scrypt = promisify(_scrypt);
 

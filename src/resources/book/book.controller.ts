@@ -27,7 +27,7 @@ import {
   QueryDTO,
   BookResponseDTO,
 } from './dto/index';
-import { FindIdDTO } from '../user/dto';
+import { FindIdDTO } from '@app/common/dtos';
 
 @ApiBearerAuth()
 @ApiTags('Book')

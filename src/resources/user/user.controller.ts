@@ -13,7 +13,6 @@ import {
 import {
   CreateUserDTO,
   UpdateUserDTO,
-  FindIdDTO,
   LoginUserDTO,
   TokenResponseDTO,
   UserResponseDTO,
@@ -29,6 +28,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { FindIdDTO } from '@app/common/dtos';
 
 @ApiTags('User')
 @Controller('users')

@@ -3,8 +3,8 @@ import { verify } from 'jsonwebtoken';
 import { NextFunction, Response } from 'express';
 import { IExpressRequest } from '../models';
 import { UserService } from '@app/resources';
-import { FindIdDTO } from '@app/resources/user/dto';
-import { JWT_SECRET } from 'config';
+import { JWT_SECRET } from '@app/../config';
+import { FindIdDTO } from '../dtos';
 
 /* Эта логика позволяет аутентифицировать пользователя на основе JWT-токена
  и добавлять информацию о пользователе в объект запроса

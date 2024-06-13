@@ -1,4 +1,4 @@
-import { DBPASSWORD, DBPORT, DBUSERNAME } from 'config';
+import { DBPASSWORD, DBPORT, DBUSERNAME } from './config';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 const config: PostgresConnectionOptions = {

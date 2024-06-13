@@ -18,8 +18,8 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@app/common/guards';
 import { AuthorService } from './author.service';
-import { FindIdDTO } from '../user/dto';
 import { AuthorResponseDTO, CreateAuthorDTO } from './dto';
+import { FindIdDTO } from '@app/common/dtos';
 
 @ApiBearerAuth()
 @ApiTags('Author')
