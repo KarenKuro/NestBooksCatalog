@@ -70,3 +70,20 @@ export class BookService {
     return { books: books, booksCount };
   }
 }
+
+// async findAll(
+//   query: QueryDTO,
+//   author: AuthorEntity,
+// ): Promise<BooksResponseDTO> {
+//   const [books, booksCount] = await this.bookRepository.findAndCount({
+//     where: {
+//       author: {
+//         id: author.id,
+//       },
+//     },
+//     relations: ['author'],
+//     skip: query.offset,
+//     take: query.limit,
+//   });
+//   return { books: books, booksCount };
+// }
